@@ -10,7 +10,6 @@ export default function Scanner({ onScan }) {
       { fps: 10, qrbox: 250 },
       false
     );
-
     scanner.render(
       (text) => {
         scanner.clear();
