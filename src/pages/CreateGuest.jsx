@@ -18,7 +18,6 @@ export default function CreateGuest() {
     const data = await res.json();
     setQrData(data);
   };
-
   const handleDownloadQR = () => {
     if (!qrData?.qrImage) return;
     
