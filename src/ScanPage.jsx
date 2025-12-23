@@ -12,7 +12,7 @@ export default function ScanPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ qr_code: qr }),
     });
-    const data = await res.json();
+    const data = await res.json(); 
 
     if (data.status === "success")
       confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });

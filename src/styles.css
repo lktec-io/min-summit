@@ -231,6 +231,9 @@ header h2 {
   padding: 20px 16px 40px;
   font-family: "Poppins", sans-serif;
 }
+.container{
+    color: white;
+}
 
 header {
   text-align: center;
@@ -239,7 +242,9 @@ header {
 
 header h2 {
   font-size: 1.8rem;
-  color: #1e3a8a; /* blue */
+  font-family: "poppins";
+    font-weight: 200;
+    color: wheat;
 }
 
 .card {
@@ -275,7 +280,7 @@ input:focus {
   font-size: 1rem;
   font-weight: 600;
   color: white;
-  background: linear-gradient(135deg, #1e3a8a, #7f1d1d, #047857);
+  background: linear-gradient(135deg, #1e3a8a, #7f1d1dd9, #047857);
   transition: all 0.25s ease;
 }
 

@@ -33,7 +33,7 @@ export default function CreateGuest() {
   return (
     <div className="container">
       <header>
-        <h2>Create Guest QR</h2>
+        <h2>Add Tucasa member QR</h2>
       </header>
 
       <div className="card">
