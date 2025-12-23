@@ -9,7 +9,7 @@ export default function CreateGuest() {
   const handleCreateGuest = async () => {
     if (!name || !zone) return alert("Jaza jina na kanda");
 
-    const res = await fetch("https://min-summit.nardio.online/create-guest", {
+    const res = await fetch("/api/create-guest", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, zone }),
@@ -20,7 +20,7 @@ export default function CreateGuest() {
   };
   const handleDownloadQR = () => {
     if (!qrData?.qrImage) return;
-    
+
     // Create a temporary link
     const link = document.createElement("a");
     link.href = qrData.qrImage;
@@ -56,8 +56,14 @@ export default function CreateGuest() {
 
       {qrData && (
         <div className="result success">
-          <h3>{qrData.name} - {qrData.zone}</h3>
-          <img src={qrData.qrImage} alt="QR Code" style={{ marginTop: '10px' }} />
+          <h3>
+            {qrData.name} - {qrData.zone}
+          </h3>
+          <img
+            src={qrData.qrImage}
+            alt="QR Code"
+            style={{ marginTop: "10px" }}
+          />
           <p>QR ready to print on badge</p>
           <button className="batan" onClick={handleDownloadQR}>
             Download QR

@@ -5,14 +5,15 @@ import "./styles.css";
 
 export default function ScanPage() {
   const [result, setResult] = useState(null);
-  
+
   const handleScan = async (qr) => {
-    const res = await fetch("https://min-summit.nardio.online/verify", {
+    const res = await fetch("/api/verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ qr_code: qr }),
     });
-    const data = await res.json(); 
+
+    const data = await res.json();
 
     if (data.status === "success")
       confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
