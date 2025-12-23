@@ -1,0 +1,334 @@
+@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap");
+
+
+/* ==================================================
+   ROOT VARIABLES – PARTY BRAND COLORS
+================================================== */
+:root {
+  --blue: #1e3a8a;
+  --blue-light: #3b82f6;
+
+  --maroon: #7f1d1d;
+  --maroon-light: #b91c1c;
+
+  --zambalau: #047857;
+  --zambalau-light: #10b981;
+
+  --bg-dark: #020617;
+  --glass: rgba(255, 255, 255, 0.12);
+
+  --text-light: #f8fafc;
+  --text-muted: rgba(255,255,255,.75);
+
+  --radius: 18px;
+  --shadow: 0 20px 45px rgba(0,0,0,.45);
+}
+
+/* ==================================================
+   GLOBAL RESET
+================================================== */
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", system-ui, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, #1e293b, var(--bg-dark));
+  color: var(--text-light);
+}
+
+/* ==================================================
+   MAIN CONTAINER
+================================================== */
+.container {
+  max-width: 420px;
+  margin: auto;
+  padding: 20px 16px 40px;
+  animation: fadeIn 0.6s ease;
+}
+
+
+.container h2{
+    font-family: "poppins";
+    font-weight: 200;
+}
+.container img{
+    border-bottom: 1px solid wheat;
+    border-radius: 50px;
+    height: 75px;
+    width: 85px;
+    padding-bottom: 12px;
+}
+/* ==================================================
+   HEADER
+================================================== */
+header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+header img {
+  height: 70px;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.4));
+}
+
+header h2 {
+  font-size: 1.8rem;
+  letter-spacing: .5px;
+}
+
+/* ==================================================
+   CARD (GLASS EFFECT)
+================================================== */
+.card {
+  background: var(--glass);
+  backdrop-filter: blur(18px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+/* ==================================================
+   QR SCANNER
+================================================== */
+#reader {
+  overflow: hidden;
+}
+
+#reader video {
+  border-radius: 14px;
+}
+
+/* ==================================================
+   RESULT CARD
+================================================== */
+.result {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: var(--radius);
+  text-align: center;
+  animation: slideUp .45s ease;
+  backdrop-filter: blur(14px);
+}
+
+.result h3 {
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+}
+
+.result p {
+  font-size: .95rem;
+  opacity: .9;
+  margin-bottom: 8px;
+}
+
+.result strong {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: .9rem;
+}
+
+/* ==================================================
+   SUCCESS STATE
+================================================== */
+.result.success {
+  background: rgba(4, 120, 87, 0.28);
+  border: 1px solid var(--zambalau-light);
+}
+
+.result.success strong {
+  background: linear-gradient(
+    135deg,
+    var(--zambalau-light),
+    var(--zambalau)
+  );
+  color: white;
+}
+
+/* ==================================================
+   BLOCKED STATE
+================================================== */
+.result.blocked {
+  background: rgba(127, 29, 29, 0.32);
+  border: 1px solid var(--maroon-light);
+}
+
+.result.blocked strong {
+  background: linear-gradient(
+    135deg,
+    var(--maroon-light),
+    var(--maroon)
+  );
+  color: white;
+}
+
+/* ==================================================
+   LOADING / SCAN FEEL (OPTIONAL)
+================================================== */
+.scan-hint {
+  text-align: center;
+  margin-top: 10px;
+  font-size: .85rem;
+  color: var(--text-muted);
+}
+
+/* ==================================================
+   ANIMATIONS
+================================================== */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==================================================
+   MOBILE TWEAKS
+================================================== */
+@media (max-width: 380px) {
+  header h2 {
+    font-size: 1.5rem;
+  }
+
+  header img {
+    height: 60px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==================================================
+   HTML5-QRCODE INTERNAL BUTTONS (START / STOP)
+================================================== */
+
+/* Wrapper ya controls */
+#reader__dashboard {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Button zote (Start / Stop / Camera select) */
+#reader__dashboard button {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+
+  padding: 10px 22px;
+  border-radius: 50px;
+
+  font-size: .9rem;
+  font-weight: 600;
+  letter-spacing: .3px;
+
+  color: white;
+  background: linear-gradient(
+    135deg,
+    var(--blue-light),
+    var(--blue)
+  );
+
+  box-shadow: 0 10px 28px rgba(30,58,138,.45);
+  transition: all .25s ease;
+}
+
+/* Hover */
+#reader__dashboard button:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 16px 38px rgba(30,58,138,.65);
+}
+
+/* Active (click) */
+#reader__dashboard button:active {
+  transform: scale(.96);
+}
+
+/* STOP scanning (button ya pili usually) */
+#reader__dashboard button:nth-of-type(2) {
+  background: linear-gradient(
+    135deg,
+    var(--maroon-light),
+    var(--maroon)
+  );
+  box-shadow: 0 10px 28px rgba(127,29,29,.5);
+  margin-left: 15px;
+}
+
+/* Disabled state */
+#reader__dashboard button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ==================================================
+   CAMERA SELECT DROPDOWN
+================================================== */
+#reader__dashboard select {
+  margin-left: 8px;
+  padding: 9px 14px;
+  border-radius: 50px;
+
+  background: rgba(255,255,255,.15);
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255,255,255,.3);
+  color: white;
+  font-size: .85rem;
+  outline: none;
+}
+
+/* ==================================================
+   SCAN STATUS TEXT
+================================================== */
+#reader__status_span {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+
+  font-size: .8rem;
+  color: var(--text-muted);
+}
+
+/* ==================================================
+   REMOVE UGLY DEFAULT BORDERS
+================================================== */
+#reader__scan_region {
+  border: none !important;
+}
