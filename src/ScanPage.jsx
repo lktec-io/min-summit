@@ -6,7 +6,7 @@ import "./styles.css";
 export default function ScanPage() {
   const [result, setResult] = useState(null);
 
-  // 🔊 Sounds
+  // 🔊 Sound
   const successSound = new Audio("/success.mp3");
   const blockedSound = new Audio("/blocked.mp3");
 
