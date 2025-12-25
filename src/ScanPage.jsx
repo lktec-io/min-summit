@@ -20,7 +20,10 @@ export default function ScanPage() {
     const data = await res.json();
 
     if (data.status === "success") {
-      // 🎉 Confetti
+    
+
+
+      
       confetti({
         particleCount: 120,
         spread: 70,
