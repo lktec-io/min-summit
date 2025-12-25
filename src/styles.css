@@ -317,7 +317,6 @@ input:focus {
   background: #222;
   color: #fff;
 }
-
 .back-btn:hover {
   background: #000;
 }
@@ -360,7 +359,7 @@ input:focus {
   padding: 10px 22px;
   border-radius: 50px;
 
-  font-size: .9rem;
+  font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: .3px;
 
