@@ -47,7 +47,7 @@ export default function ScanPage() {
   return (
     <div className="container">
       <header>
-        <img src="/pcm.png" alt="Logo" />
+        <img src="/picha.png" alt="Logo" />
         <h2>CardHub Verification</h2>
       </header>
 
@@ -56,7 +56,7 @@ export default function ScanPage() {
       {result && (
         <div className={`result ${result.status}`}>
           <h3>{result.name}</h3>
-          <p>Kanda: {result.zone}</p>
+          <p>Status: {result.zone}</p>
           <strong>{result.message}</strong>
 
           <button className="batan back-btn" onClick={handleBack}>
