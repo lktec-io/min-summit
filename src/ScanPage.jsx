@@ -48,7 +48,7 @@ export default function ScanPage() {
     <div className="container">
       <header>
         <img src="/pcm.png" alt="Logo" />
-        <h2>Min-Summit Verification</h2>
+        <h2>CardHub Verification</h2>
       </header>
 
       {!result && <Scanner onScan={handleScan} />}
