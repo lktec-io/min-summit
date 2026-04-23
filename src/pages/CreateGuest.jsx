@@ -64,10 +64,10 @@ const handleDownloadQR = async () => {
          <div className="qr-container" ref={qrRef}>
   <img src={qrData.qrImage} alt="QR Code" />
 
-  <div className="corner tl"></div>
+  {/* <div className="corner tl"></div>
   <div className="corner tr"></div>
   <div className="corner bl"></div>
-  <div className="corner br"></div>
+  <div className="corner br"></div> */}
 </div>
           <p>QR ready to print on badge</p>
           <button className="batan" onClick={handleDownloadQR}>
