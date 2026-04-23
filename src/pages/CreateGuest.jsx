@@ -59,11 +59,14 @@ export default function CreateGuest() {
           <h3>
             {qrData.name} - {qrData.zone}
           </h3>
-          <img
-            src={qrData.qrImage}
-            alt="QR Code"
-            style={{ marginTop: "10px" }}
-          />
+          <div className="qr-container">
+  <img src={qrData.qrImage} alt="QR Code" />
+
+  <div className="corner tl"></div>
+  <div className="corner tr"></div>
+  <div className="corner bl"></div>
+  <div className="corner br"></div>
+</div>
           <p>QR ready to print on badge</p>
           <button className="batan" onClick={handleDownloadQR}>
             Download QR
