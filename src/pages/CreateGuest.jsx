@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "../styles.css";
 
 export default function CreateGuest() {
   const [name, setName] = useState("");
   const [zone, setZone] = useState("");
+  const qrRef = useRef(null);
   const [qrData, setQrData] = useState(null);
 
   const handleCreateGuest = async () => {
