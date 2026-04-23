@@ -18,17 +18,17 @@ export default function CreateGuest() {
     const data = await res.json();
     setQrData(data);
   };
-  const handleDownloadQR = () => {
-    if (!qrData?.qrImage) return;
+  const handleDownloadQR = async () => {
+  if (!qrRef.current) return;
 
-    // Create a temporary link
-    const link = document.createElement("a");
-    link.href = qrData.qrImage;
-    link.download = `${qrData.name}_${qrData.zone}_QR.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const canvas = await html2canvas(qrRef.current);
+  const image = canvas.toDataURL("image/png");
+
+  const link = document.createElement("a");
+  link.href = image;
+  link.download = `${qrData.name}_${qrData.zone}_QR.png`;
+  link.click();
+};
 
   return (
     <div className="container">
@@ -59,7 +59,7 @@ export default function CreateGuest() {
           <h3>
             {qrData.name} - {qrData.zone}
           </h3>
-          <div className="qr-container">
+         <div className="qr-container" ref={qrRef}>
   <img src={qrData.qrImage} alt="QR Code" />
 
   <div className="corner tl"></div>
