@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import html2canvas from "html2canvas";
 import "../styles.css";
 
 export default function CreateGuest() {
@@ -19,7 +20,7 @@ export default function CreateGuest() {
     const data = await res.json();
     setQrData(data);
   };
-  const handleDownloadQR = async () => {
+const handleDownloadQR = async () => {
   if (!qrRef.current) return;
 
   const canvas = await html2canvas(qrRef.current);
