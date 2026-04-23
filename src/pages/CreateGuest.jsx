@@ -33,7 +33,7 @@ export default function CreateGuest() {
   return (
     <div className="container">
       <header>
-        <h2>Add Tucasa member QR</h2>
+        <h2>Add wedding ceremony QR</h2>
       </header>
 
       <div className="card">
@@ -45,7 +45,7 @@ export default function CreateGuest() {
         />
         <input
           type="text"
-          placeholder="Zone"
+          placeholder="Guest ID"
           value={zone}
           onChange={(e) => setZone(e.target.value)}
         />

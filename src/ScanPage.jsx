@@ -21,9 +21,6 @@ export default function ScanPage() {
 
     if (data.status === "success") {
     
-
-
-      
       confetti({
         particleCount: 120,
         spread: 70,
