@@ -3,76 +3,85 @@ import html2canvas from "html2canvas";
 import "../styles.css";
 
 export default function CreateGuest() {
-  const [name, setName] = useState("");
-  const [zone, setZone] = useState("");
-  const qrRef = useRef(null);
   const [qrData, setQrData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const qrRef = useRef(null);
 
   const handleCreateGuest = async () => {
-    if (!name || !zone) return alert("Jaza jina na kanda");
-
-    const res = await fetch("/api/create-guest", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, zone }),
-    });
-
-    const data = await res.json();
-    setQrData(data);
+    setLoading(true);
+    try {
+      const res = await fetch("/api/create-guest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      setQrData(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
-const handleDownloadQR = async () => {
-  if (!qrRef.current) return;
 
-  const canvas = await html2canvas(qrRef.current);
-  const image = canvas.toDataURL("image/png");
-
-  const link = document.createElement("a");
-  link.href = image;
-  link.download = `${qrData.name}_${qrData.zone}_QR.png`;
-  link.click();
-};
+  const handleDownload = async () => {
+    if (!qrRef.current) return;
+    const canvas = await html2canvas(qrRef.current, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      useCORS: true,
+    });
+    const image = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.href = image;
+    link.download = `${qrData.name || "guest"}_${qrData.zone || "qr"}_QR.png`;
+    link.click();
+  };
 
   return (
-    <div className="container">
-      <header>
-        <h2>Add wedding ceremony QR</h2>
-      </header>
-
-      <div className="card">
-        <input
-          type="text"
-          placeholder="Guest Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Guest ID"
-          value={zone}
-          onChange={(e) => setZone(e.target.value)}
-        />
-        <button className="batan" onClick={handleCreateGuest}>
-          Generate QR
-        </button>
+    <div className="generate-page">
+      <div className="generate-header">
+        <h1>Wedding QR Generator</h1>
+        <p>Generate a unique QR code for your guest</p>
       </div>
 
-      {qrData && (
-        <div className="result success">
-          <h3>
-            {qrData.name} - {qrData.zone}
-          </h3>
-         <div className="qr-container" ref={qrRef}>
-  <img src={qrData.qrImage} alt="QR Code" />
-
-  {/* <div className="corner tl"></div>
-  <div className="corner tr"></div>
-  <div className="corner bl"></div>
-  <div className="corner br"></div> */}
-</div>
-          <p>QR ready to print on badge</p>
-          <button className="batan" onClick={handleDownloadQR}>
-            Download QR
+      {!qrData ? (
+        <div className="generate-card">
+          <button
+            className="generate-btn"
+            onClick={handleCreateGuest}
+            disabled={loading}
+          >
+            {loading ? <span className="spinner" /> : "Generate QR"}
           </button>
+        </div>
+      ) : (
+        <div className="qr-result-wrapper">
+          {/* This div is captured by html2canvas */}
+          <div className="qr-card" ref={qrRef}>
+            <div className="qr-frame-container">
+              <div className="qr-corner tl" />
+              <div className="qr-corner tr" />
+              <div className="qr-corner bl" />
+              <div className="qr-corner br" />
+              <img src={qrData.qrImage} alt="QR Code" />
+            </div>
+            <div className="qr-guest-info">
+              {qrData.name && <h3>{qrData.name}</h3>}
+              {qrData.zone && (
+                <span className="zone-badge">{qrData.zone}</span>
+              )}
+            </div>
+          </div>
+
+          <div className="qr-actions">
+            <button className="download-btn" onClick={handleDownload}>
+              Download QR
+            </button>
+            <button className="again-btn" onClick={() => setQrData(null)}>
+              Generate Another
+            </button>
+          </div>
         </div>
       )}
     </div>

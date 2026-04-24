@@ -1,34 +1,26 @@
-@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-
-/* ==================================================
-   ROOT VARIABLES – PARTY BRAND COLORS
-================================================== */
+/* ================================================
+   ROOT VARIABLES
+================================================ */
 :root {
   --blue: #1e3a8a;
   --blue-light: #3b82f6;
-
   --maroon: #7f1d1d;
   --maroon-light: #b91c1c;
-
-  --zambalau: #047857;
-  --zambalau-light: #10b981;
-
+  --green: #047857;
+  --green-light: #10b981;
   --bg-dark: #020617;
-  --glass: rgba(255, 255, 255, 0.12);
-
+  --glass: rgba(255, 255, 255, 0.08);
   --text-light: #f8fafc;
-  --text-muted: rgba(255,255,255,.75);
-
-  --radius: 18px;
-  --shadow: 0 20px 45px rgba(0,0,0,.45);
+  --text-muted: rgba(255, 255, 255, 0.62);
+  --radius: 20px;
+  --shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
 }
 
-/* ==================================================
+/* ================================================
    GLOBAL RESET
-================================================== */
-
-
+================================================ */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -38,463 +30,561 @@
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top, #1e293b, var(--bg-dark));
+  background: radial-gradient(ellipse at top, #0f172a, var(--bg-dark));
+  color: var(--text-light);
+  overflow-x: hidden;
+}
+
+/* ================================================
+   GENERATE PAGE
+================================================ */
+.generate-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.generate-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.generate-header h1 {
+  font-size: 1.9rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
   color: var(--text-light);
 }
 
-/* ==================================================
-   MAIN CONTAINER
-================================================== */
-.container {
-  max-width: 420px;
-  margin: auto;
-  padding: 20px 16px 40px;
-  animation: fadeIn 0.6s ease;
+.generate-header p {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 300;
 }
 
-
-.container h2{
-    font-family: "poppins";
-    font-weight: 200;
-}
-.container img{
-    border-bottom: 1px solid wheat;
-    border-radius: 50px;
-    height: 75px;
-    width: 85px;
-    padding-bottom: 12px;
-}
-/* ==================================================
-   HEADER
-================================================== */
-header {
-  text-align: center;
-  margin-bottom: 18px;
-}
-
-header img {
-  height: 70px;
-  margin-bottom: 8px;
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,.4));
-}
-
-header h2 {
-  font-size: 1.8rem;
-  letter-spacing: .5px;
-}
-
-/* ==================================================
-   CARD (GLASS EFFECT)
-================================================== */
-.card {
+/* Idle card — shown before QR is generated */
+.generate-card {
   background: var(--glass);
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 14px;
-  border: 1px solid rgba(255,255,255,.18);
+  padding: 52px 40px;
+  text-align: center;
+  width: 100%;
+  max-width: 380px;
 }
 
-/* ==================================================
-   QR SCANNER
-================================================== */
-#reader {
+/* Generate button */
+.generate-btn {
+  padding: 15px 44px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, var(--blue), var(--blue-light), var(--green));
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+  box-shadow: 0 8px 28px rgba(59, 130, 246, 0.45);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  min-width: 190px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.generate-btn:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(59, 130, 246, 0.6);
+}
+
+.generate-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ================================================
+   QR RESULT
+================================================ */
+.qr-result-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: slideUp 0.5s ease;
+  width: 100%;
+  max-width: 360px;
+}
+
+/* White card — captured by html2canvas */
+.qr-card {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: var(--radius);
+  padding: 28px 24px 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  text-align: center;
+  width: 100%;
+}
+
+/* Frame area holding QR + corner brackets */
+.qr-frame-container {
+  position: relative;
+  width: 210px;
+  height: 210px;
+  margin: 0 auto 14px;
+  padding: 10px;
+  background: white;
+}
+
+.qr-frame-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 4px;
+}
+
+/* Corner brackets — WhatsApp-style */
+.qr-corner {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: 4px solid var(--blue);
+}
+
+.qr-corner.tl {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 7px;
+}
+
+.qr-corner.tr {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+  border-top-right-radius: 7px;
+}
+
+.qr-corner.bl {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+  border-bottom-left-radius: 7px;
+}
+
+.qr-corner.br {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 7px;
+}
+
+.qr-guest-info {
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.qr-guest-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.zone-badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 3px 14px;
+  background: #eff6ff;
+  color: var(--blue);
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Action buttons row */
+.qr-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.download-btn {
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, var(--green), var(--green-light));
+  box-shadow: 0 8px 22px rgba(4, 120, 87, 0.42);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(4, 120, 87, 0.55);
+}
+
+.again-btn {
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(10px);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.again-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--text-light);
+}
+
+/* ================================================
+   SCANNER — FULL SCREEN
+================================================ */
+.scanner-fullscreen {
+  position: fixed;
+  inset: 0;
+  background: #000;
   overflow: hidden;
 }
 
-#reader video {
-  border-radius: 14px;
+/* html5-qrcode renders video inside this div */
+#qr-reader {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 }
 
-/* ==================================================
-   RESULT CARD
-================================================== */
-.result {
-  margin-top: 18px;
-  padding: 18px;
-  border-radius: var(--radius);
-  text-align: center;
-  animation: slideUp .45s ease;
-  backdrop-filter: blur(14px);
+#qr-reader video {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover !important;
+  display: block !important;
 }
 
-.result h3 {
-  font-size: 1.2rem;
-  margin-bottom: 4px;
+/* Hide all built-in html5-qrcode UI chrome */
+#qr-reader img:not([id*="qr"]),
+#qr-reader__header_message,
+#qr-reader__dashboard,
+#qr-reader__filescan_input,
+#qr-reader__status_span,
+#qr-reader__header {
+  display: none !important;
 }
 
-.result p {
-  font-size: .95rem;
-  opacity: .9;
-  margin-bottom: 8px;
-}
-
-.result strong {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 6px 14px;
-  border-radius: 50px;
-  font-size: .9rem;
-}
-
-/* ==================================================
-   SUCCESS STATE
-================================================== */
-.result.success {
-  background: rgba(4, 120, 87, 0.28);
-  border: 1px solid var(--zambalau-light);
-}
-
-.result.success strong {
-  background: linear-gradient(
-    135deg,
-    var(--zambalau-light),
-    var(--zambalau)
-  );
-  color: white;
-}
-
-/* ==================================================
-   BLOCKED STATE
-================================================== */
-.result.blocked {
-  background: rgba(127, 29, 29, 0.32);
-  border: 1px solid var(--maroon-light);
-}
-
-.result.blocked strong {
-  background: linear-gradient(
-    135deg,
-    var(--maroon-light),
-    var(--maroon)
-  );
-  color: white;
-}
-
-/* ==================================================
-   LOADING / SCAN FEEL (OPTIONAL)
-================================================== */
-.scan-hint {
-  text-align: center;
-  margin-top: 10px;
-  font-size: .85rem;
-  color: var(--text-muted);
-}
-
-/* ==================================================
-   ANIMATIONS
-================================================== */
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* ==================================================
-   MOBILE TWEAKS
-================================================== */
-@media (max-width: 380px) {
-  header h2 {
-    font-size: 1.5rem;
-  }
-
-  header img {
-    height: 60px;
-  }
-}
-
-
-
-
-
-
-.container {
-  max-width: 420px;
-  margin: auto;
-  padding: 20px 16px 40px;
-  font-family: "Poppins", sans-serif;
-}
-.container{
-    color: white;
-}
-
-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-header h2 {
-  font-size: 1.8rem;
-  font-family: "poppins";
-    font-weight: 200;
-    color: wheat;
-}
-
-.card {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(16px);
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+/* Dark overlay + faint background image */
+.scanner-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-input {
-  padding: 12px 16px;
-  border-radius: 14px;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  background: rgba(255,255,255,0.95);
-}
-
-input:focus {
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.45);
-  transform: scale(1.02);
-}
-
-.batan {
-  padding: 12px;
-  border-radius: 14px;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  color: white;
-  background: linear-gradient(135deg, #1e3a8a, #7f1d1dd9, #047857);
-  transition: all 0.25s ease;
-}
-
-.batan:hover {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-}
-
-.result {
-  margin-top: 20px;
-  padding: 18px;
-  border-radius: 18px;
-  text-align: center;
-  backdrop-filter: blur(14px);
-}
-
-.result.success {
-  background: rgba(4,120,87,0.28);
-  border: 1px solid #10b981;
-}
-
-.result img {
-  margin-top: 10px;
-  max-width: 100%;
-  border-radius: 12px;
-}
-
-.result p {
-  margin-top: 6px;
-}
-
-.back-btn {
-  margin-top: 15px;
-  background: #222;
-  color: #fff;
-}
-.back-btn:hover {
-  background: #000;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ==================================================
-   HTML5-QRCODE INTERNAL BUTTONS (START / STOP)
-================================================== */
-
-/* Wrapper ya controls */
-#reader__dashboard {
-  margin-top: 14px;
-  display: flex;
+  align-items: center;
   justify-content: center;
 }
 
-/* Button zote (Start / Stop / Camera select) */
-#reader__dashboard button {
-  appearance: none;
-  border: none;
-  cursor: pointer;
+.scanner-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/pcm12.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.07;
+  pointer-events: none;
+}
 
-  padding: 10px 22px;
+/* Top title */
+.scanner-title {
+  position: absolute;
+  top: 52px;
+  text-align: center;
+  z-index: 4;
+}
+
+.scanner-title h2 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+  letter-spacing: 0.4px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* Scan frame — transparent center, box-shadow creates dark surround */
+.scan-frame {
+  position: relative;
+  width: 264px;
+  height: 264px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.66);
+  border-radius: 4px;
+  z-index: 3;
+}
+
+/* Overflow-clipped inner for the scan line */
+.scan-inner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+/* Animated scanning line */
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--green-light) 50%, transparent 100%);
+  box-shadow: 0 0 12px var(--green-light), 0 0 24px rgba(16, 185, 129, 0.35);
+  border-radius: 2px;
+  animation: scanMove 2.6s ease-in-out infinite;
+}
+
+@keyframes scanMove {
+  0%   { top: 2px;  opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { top: calc(100% - 4px); opacity: 0; }
+}
+
+/* Corner brackets on scan frame */
+.scan-corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 3.5px solid var(--green-light);
+  z-index: 4;
+}
+
+.scan-corner.tl {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 8px;
+}
+
+.scan-corner.tr {
+  top: -1px;
+  right: -1px;
+  border-left: none;
+  border-bottom: none;
+  border-top-right-radius: 8px;
+}
+
+.scan-corner.bl {
+  bottom: -1px;
+  left: -1px;
+  border-right: none;
+  border-top: none;
+  border-bottom-left-radius: 8px;
+}
+
+.scan-corner.br {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 8px;
+}
+
+/* Hint text below the frame */
+.scan-hint {
+  position: relative;
+  z-index: 4;
+  margin-top: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* ================================================
+   RESULT OVERLAY
+================================================ */
+.result-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  animation: fadeIn 0.4s ease;
+}
+
+.result-overlay.success-bg {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(4, 120, 87, 0.28),
+    rgba(2, 6, 23, 0.93)
+  );
+}
+
+.result-overlay.blocked-bg {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(127, 29, 29, 0.28),
+    rgba(2, 6, 23, 0.93)
+  );
+}
+
+.result-card {
+  width: 100%;
+  max-width: 340px;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 26px;
+  padding: 38px 28px;
+  text-align: center;
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.55);
+  animation: springUp 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.result-card.success { border: 1px solid rgba(16, 185, 129, 0.38); }
+.result-card.blocked { border: 1px solid rgba(185, 28, 28, 0.38); }
+
+.result-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+  font-size: 2rem;
+}
+
+.result-icon.success-icon {
+  background: rgba(16, 185, 129, 0.18);
+  border: 2px solid rgba(16, 185, 129, 0.45);
+}
+
+.result-icon.blocked-icon {
+  background: rgba(185, 28, 28, 0.18);
+  border: 2px solid rgba(185, 28, 28, 0.45);
+}
+
+.result-card h3 {
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.result-card .zone-text {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 8px 22px;
   border-radius: 50px;
-
   font-size: 0.9rem;
   font-weight: 600;
-  letter-spacing: .3px;
+  margin-bottom: 26px;
+  letter-spacing: 0.3px;
+}
 
+.status-badge.success {
+  background: linear-gradient(135deg, var(--green-light), var(--green));
   color: white;
-  background: linear-gradient(
-    135deg,
-    var(--blue-light),
-    var(--blue)
-  );
-
-  box-shadow: 0 10px 28px rgba(30,58,138,.45);
-  transition: all .25s ease;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.42);
 }
 
-/* Hover */
-#reader__dashboard button:hover {
-  transform: translateY(-2px) scale(1.04);
-  box-shadow: 0 16px 38px rgba(30,58,138,.65);
-}
-
-/* Active (click) */
-#reader__dashboard button:active {
-  transform: scale(.96);
-}
-
-/* STOP scanning (button ya pili usually) */
-#reader__dashboard button:nth-of-type(2) {
-  background: linear-gradient(
-    135deg,
-    var(--maroon-light),
-    var(--maroon)
-  );
-  box-shadow: 0 10px 28px rgba(127,29,29,.5);
-  margin-left: 15px;
-}
-
-/* Disabled state */
-#reader__dashboard button:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-/* ==================================================
-   CAMERA SELECT DROPDOWN
-================================================== */
-#reader__dashboard select {
-  margin-left: 8px;
-  padding: 9px 14px;
-  border-radius: 50px;
-
-  background: rgba(255,255,255,.15);
-  backdrop-filter: blur(10px);
-
-  border: 1px solid rgba(255,255,255,.3);
+.status-badge.blocked {
+  background: linear-gradient(135deg, var(--maroon-light), var(--maroon));
   color: white;
-  font-size: .85rem;
-  outline: none;
+  box-shadow: 0 4px 16px rgba(185, 28, 28, 0.42);
 }
 
-/* ==================================================
-   SCAN STATUS TEXT
-================================================== */
-#reader__status_span {
-  display: block;
-  margin-top: 10px;
-  text-align: center;
-
-  font-size: .8rem;
-  color: var(--text-muted);
-}
-
-/* ==================================================
-   REMOVE UGLY DEFAULT BORDERS
-================================================== */
-#reader__scan_region {
-  border: none !important;
-}
-
-
-
-
-
-
-.qr-container {
-  position: relative;
-  width: 250px;
-  height: 250px;
-  margin: 20px auto;
-}
-
-.qr-container img {
+.back-btn {
   width: 100%;
-  height: 100%;
-  display: block;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-light);
+  background: rgba(255, 255, 255, 0.09);
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-/* Corner base */
-.corner {
-  position: absolute;
-  width: 35px;
-  height: 35px;
-  border: 5px solid black;
-  border-radius: 8px;
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.17);
+  transform: translateY(-1px);
 }
 
-/* Top Left */
-.tl {
-  top: 0;
-  left: 0;
-  border-right: none;
-  border-bottom: none;
+/* ================================================
+   ANIMATIONS
+================================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-/* Top Right */
-.tr {
-  top: 0;
-  right: 0;
-  border-left: none;
-  border-bottom: none;
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Bottom Left */
-.bl {
-  bottom: 0;
-  left: 0;
-  border-right: none;
-  border-top: none;
+@keyframes springUp {
+  from { opacity: 0; transform: scale(0.88) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* Bottom Right */
-.br {
-  bottom: 0;
-  right: 0;
-  border-left: none;
-  border-top: none;
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ================================================
+   MOBILE TWEAKS
+================================================ */
+@media (max-width: 380px) {
+  .generate-header h1 { font-size: 1.6rem; }
+  .scan-frame { width: 236px; height: 236px; }
 }
